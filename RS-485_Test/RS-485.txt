@@ -1,0 +1,24 @@
+
+4 wire (COM1 Pin Header)
+Set GPIO#496, #497
+Set to 0,1 for RS-485
+Set to 1,1 for RS-422
+Set to 0,0 for loopback
+Set to 1,0 for RS-232
+Remember to set up RS-485 before test.
+$ ./enable485 /dev/ttymxc2
+
+# Enable RS-485
+echo 496 > /sys/class/gpio/export
+echo 497 > /sys/class/gpio/export
+echo out > /sys/class/gpio/gpio1/direction
+echo out > /sys/class/gpio/gpio2/direction
+echo 0 > /sys/class/gpio/gpio1/value
+echo 1 > /sys/class/gpio/gpio2/value
+
+
+1. Test RS-485 with Adam-4520. 
+Adam-4520 Pin Data- and Pin Data+ connect to RSB-3720 COM1 Pin 1: COM_DCD and Pin 3: COM_RXD
+$ stty -F /dev/ttymxc2 speed 115200 ignbrk -brkint -icrnl -imaxbel -opost -onlcr -isig -icanon -iexten -echo -echoe -echok -echoctl -echoke
+$ cat /dev/ttymxc2 &
+$ echo "Serial Test" > /dev/ttymxc2
